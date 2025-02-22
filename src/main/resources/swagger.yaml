@@ -1,0 +1,125 @@
+swagger: '2.0'
+info:
+  title: Sales Point API
+  description: API for managing sales points
+  version: '1.0.0'
+schemes:
+  - https
+basePath: /api
+produces:
+  - application/json
+paths:
+  /salespoints:
+    get:
+      summary: Get all sales points
+      description: Retrieves a list of all sales points
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SalesPoint'
+        '500':
+          description: Internal server error
+    post:
+      summary: Create a new sales point
+      description: Creates a new sales point entry
+      parameters:
+        - in: body
+          name: salesPoint
+          description: Sales point object
+          required: true
+          schema:
+            $ref: '#/definitions/SalesPoint'
+      responses:
+        '201':
+          description: Sales point created successfully
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal server error
+          
+  /salespoints/{id}:
+    get:
+      summary: Get sales point by ID
+      description: Retrieves a specific sales point by its ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: ID of the sales point
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/SalesPoint'
+        '404':
+          description: Sales point not found
+        '500':
+          description: Internal server error
+          
+    put:
+      summary: Update sales point
+      description: Updates an existing sales point
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: ID of the sales point to update
+        - in: body
+          name: salesPoint
+          description: Updated sales point object
+          required: true
+          schema:
+            $ref: '#/definitions/SalesPoint'
+      responses:
+        '200':
+          description: Sales point updated successfully
+        '400':
+          description: Invalid input
+        '404':
+          description: Sales point not found
+        '500':
+          description: Internal server error
+          
+    delete:
+      summary: Delete sales point
+      description: Deletes a specific sales point
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+          description: ID of the sales point to delete
+      responses:
+        '204':
+          description: Sales point deleted successfully
+        '404':
+          description: Sales point not found
+        '500':
+          description: Internal server error
+
+definitions:
+  SalesPoint:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier of the sales point
+      name:
+        type: string
+        description: Name of the sales point
+      address:
+        type: string
+        description: Physical address of the sales point
+      status:
+        type: string
+        description: Current status of the sales point
+        enum: [ACTIVE, INACTIVE]
+    required:
+      - name
+      - address
+      - status
